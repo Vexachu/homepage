@@ -4,9 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Lesson 1 — Typing Practice</title>
-  <script src="sentences.js"></script> <!-- load sentence list -->
+  <!-- Import sentence list -->
+  <script src="sentences.js"></script>
   <style>
-    body { font-family: sans-serif; background:#0b0f0c; color:#e9f3ed; margin:0; padding:20px }
+    body { font-family:sans-serif; background:#0b0f0c; color:#e9f3ed; margin:0; padding:20px }
     .card { max-width:900px; margin:auto; background:#111; padding:20px; border-radius:12px }
     .controls { margin-bottom:10px; display:flex; gap:10px; flex-wrap:wrap }
     .btn { padding:10px 14px; border-radius:8px; cursor:pointer; border:1px solid #29a36a; background:#0c120e; color:#e9f3ed }
@@ -24,7 +25,7 @@
 </head>
 <body>
   <div class="card">
-    <h1>Typing Practice</h1>
+    <h1>Lesson 1 — Typing Practice</h1>
     <div class="controls">
       <label>Duration
         <select id="duration" class="btn">
@@ -81,10 +82,7 @@
 
     function rand(arr){ return arr[Math.floor(Math.random()*arr.length)] }
     function buildSymbols(n=50){ return Array.from({length:n},()=>rand(SYMBOLS)).join('') }
-    function buildLetters(letters="as",n=50){ 
-      const pool=letters.split('').concat([' ']); 
-      return Array.from({length:n},()=>rand(pool)).join(''); 
-    }
+    function buildLetters(letters="as",n=50){ const pool=letters.split('').concat([' ']); return Array.from({length:n},()=>rand(pool)).join(''); }
     function buildSentences(n=5){ return Array.from({length:n},()=>rand(SENTENCES)).join(' ') }
 
     function appendBuffer(){
@@ -122,8 +120,8 @@
       timer=setInterval(()=>{ updateStats(); if(target.length-typed.length<100){appendBuffer(); renderPrompt()} },100);
     }
     function stop(){ if(started){ updateStats(); finish() } }
-    function finish(wpm=0,acc=100){ clearInterval(timer); started=false; elInput.disabled=true; elFeedback.textContent=acc>=95?\"Great accuracy!\":\"Slow down for accuracy.\"; }
-    function reset(full=true){ clearInterval(timer); target=\"\"; typed=\"\"; errors=0; started=false; elInput.value=\"\"; elInput.disabled=true; elProgress.style.width=\"0%\"; if(full){ elTime.textContent=\"0.0s\"; elWpm.textContent=\"0\"; elAcc.textContent=\"100%\"; elFeedback.textContent=\"Tip: Accuracy first (≥95%).\" } renderPrompt() }
+    function finish(wpm=0,acc=100){ clearInterval(timer); started=false; elInput.disabled=true; elFeedback.textContent=acc>=95?"Great accuracy!":"Slow down for accuracy."; }
+    function reset(full=true){ clearInterval(timer); target=""; typed=""; errors=0; started=false; elInput.value=""; elInput.disabled=true; elProgress.style.width="0%"; if(full){ elTime.textContent="0.0s"; elWpm.textContent="0"; elAcc.textContent="100%"; elFeedback.textContent="Tip: Accuracy first (≥95%)." } renderPrompt() }
 
     elInput.addEventListener('input',()=>{ if(!started) return; const v=elInput.value; if(v.length>typed.length){ if(v[v.length-1]!==target[v.length-1]) errors++; } typed=v; renderPrompt() });
     selMode.addEventListener('change',()=>{ elLettersWrap.style.display=selMode.value==='letters'?'inline-block':'none'; reset(true) });
