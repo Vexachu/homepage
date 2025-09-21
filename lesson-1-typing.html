@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lesson 1 — Typing Practice</title>
+  <script src="sentences.js"></script> <!-- load sentence list -->
+  <style>
+    body { font-family: sans-serif; background:#0b0f0c; color:#e9f3ed; margin:0; padding:20px }
+    .card { max-width:900px; margin:auto; background:#111; padding:20px; border-radius:12px }
+    .controls { margin-bottom:10px; display:flex; gap:10px; flex-wrap:wrap }
+    .btn { padding:10px 14px; border-radius:8px; cursor:pointer; border:1px solid #29a36a; background:#0c120e; color:#e9f3ed }
+    .btn.primary { background:#29a36a; color:#06150f; border:0 }
+    .prompt { padding:16px; background:#1a1f1b; border-radius:8px; min-height:100px; white-space:pre-wrap; line-height:1.6 }
+    .char.correct { color:#73d4a9 }
+    .char.wrong { color:#e26d6d; text-decoration:underline }
+    .char.active { background:rgba(41,163,106,.3); border-radius:4px }
+    textarea { width:100%; min-height:100px; margin-top:10px; background:#0c120e; color:#e9f3ed; border:1px solid #29a36a; border-radius:8px; padding:10px }
+    .stats { display:flex; gap:20px; margin-top:10px }
+    .stat { flex:1; text-align:center }
+    .bar { height:10px; background:#333; border-radius:999px; overflow:hidden; margin-top:10px }
+    .bar > span { display:block; height:100%; width:0%; background:linear-gradient(90deg,#29a36a,#73d4a9) }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Typing Practice</h1>
+    <div class="controls">
+      <label>Duration
+        <select id="duration" class="btn">
+          <option value="15">15s</option>
+          <option value="30" selected>30s</option>
+          <option value="60">60s</option>
+        </select>
+      </label>
+      <label>Mode
+        <select id="mode" class="btn">
+          <option value="symbols">Symbols & Numbers</option>
+          <option value="letters">Letter Focus</option>
+          <option value="sentences" selected>Sentences</option>
+        </select>
+      </label>
+      <label id="lettersWrap" style="display:none">Letters
+        <input id="letters" class="btn" type="text" maxlength="3" placeholder="e.g. as" />
+      </label>
+      <button id="btnStart" class="btn primary">Start</button>
+      <button id="btnStop" class="btn">Stop</button>
+      <button id="btnReset" class="btn">Reset</button>
+    </div>
+
+    <div id="prompt" class="prompt"></div>
+    <textarea id="input" placeholder="Start typing..." disabled></textarea>
+    <div class="bar"><span id="progress"></span></div>
+
+    <div class="stats">
+      <div class="stat">Time <div id="time">0.0s</div></div>
+      <div class="stat">WPM <div id="wpm">0</div></div>
+      <div class="stat">Accuracy <div id="acc">100%</div></div>
+    </div>
+    <p id="feedback">Tip: Accuracy first (≥95%).</p>
+  </div>
+
+  <script>
+    const SYMBOLS = "1234567890!@#$%^&*()[]{}<>?+=-_/.,";
+    let target="", typed="", errors=0, started=false, startTime=0, duration=30, tEnd=0, timer=null;
+
+    const elPrompt=document.getElementById('prompt'),
+          elInput=document.getElementById('input'),
+          elTime=document.getElementById('time'),
+          elWpm=document.getElementById('wpm'),
+          elAcc=document.getElementById('acc'),
+          elProgress=document.getElementById('progress'),
+          elFeedback=document.getElementById('feedback'),
+          selDuration=document.getElementById('duration'),
+          selMode=document.getElementById('mode'),
+          elLetters=document.getElementById('letters'),
+          elLettersWrap=document.getElementById('lettersWrap'),
+          btnStart=document.getElementById('btnStart'),
+          btnStop=document.getElementById('btnStop'),
+          btnReset=document.getElementById('btnReset');
+
+    function rand(arr){ return arr[Math.floor(Math.random()*arr.length)] }
+    function buildSymbols(n=50){ return Array.from({length:n},()=>rand(SYMBOLS)).join('') }
+    function buildLetters(letters="as",n=50){ 
+      const pool=letters.split('').concat([' ']); 
+      return Array.from({length:n},()=>rand(pool)).join(''); 
+    }
+    function buildSentences(n=5){ return Array.from({length:n},()=>rand(SENTENCES)).join(' ') }
+
+    function appendBuffer(){
+      if(selMode.value==="symbols") target+=(target?" ":"")+buildSymbols(40);
+      else if(selMode.value==="letters") target+=(target?" ":"")+buildLetters(elLetters.value||"as",60);
+      else target+=(target?" ":"")+buildSentences(5);
+    }
+
+    function renderPrompt(){
+      elPrompt.innerHTML="";
+      for(let i=0;i<target.length;i++){
+        const span=document.createElement('span');
+        span.textContent=target[i];
+        if(i<typed.length) span.className=(typed[i]===target[i]?"char correct":"char wrong");
+        if(i===typed.length) span.className="char active";
+        elPrompt.appendChild(span);
+      }
+    }
+
+    function updateStats(){
+      const now=performance.now(), elapsed=(now-startTime)/1000;
+      elTime.textContent=elapsed.toFixed(1)+"s";
+      const words=typed.length/5, wpm=elapsed>0?Math.round((words/elapsed)*60):0;
+      const acc=typed.length?Math.round(((typed.length-errors)/typed.length)*100):100;
+      elWpm.textContent=wpm; elAcc.textContent=acc+"%";
+      elProgress.style.width=Math.min(100,elapsed/duration*100)+"%";
+      if(now>=tEnd){ finish(wpm,acc); }
+    }
+
+    function start(){
+      reset(false); duration=+selDuration.value;
+      appendBuffer(); appendBuffer(); renderPrompt();
+      started=true; elInput.disabled=false; elInput.focus();
+      startTime=performance.now(); tEnd=startTime+duration*1000;
+      timer=setInterval(()=>{ updateStats(); if(target.length-typed.length<100){appendBuffer(); renderPrompt()} },100);
+    }
+    function stop(){ if(started){ updateStats(); finish() } }
+    function finish(wpm=0,acc=100){ clearInterval(timer); started=false; elInput.disabled=true; elFeedback.textContent=acc>=95?\"Great accuracy!\":\"Slow down for accuracy.\"; }
+    function reset(full=true){ clearInterval(timer); target=\"\"; typed=\"\"; errors=0; started=false; elInput.value=\"\"; elInput.disabled=true; elProgress.style.width=\"0%\"; if(full){ elTime.textContent=\"0.0s\"; elWpm.textContent=\"0\"; elAcc.textContent=\"100%\"; elFeedback.textContent=\"Tip: Accuracy first (≥95%).\" } renderPrompt() }
+
+    elInput.addEventListener('input',()=>{ if(!started) return; const v=elInput.value; if(v.length>typed.length){ if(v[v.length-1]!==target[v.length-1]) errors++; } typed=v; renderPrompt() });
+    selMode.addEventListener('change',()=>{ elLettersWrap.style.display=selMode.value==='letters'?'inline-block':'none'; reset(true) });
+    btnStart.addEventListener('click',start); btnStop.addEventListener('click',stop); btnReset.addEventListener('click',()=>reset(true));
+    reset(true);
+  </script>
+</body>
+</html>
