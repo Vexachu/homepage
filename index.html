@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Learn to Code — Kid‑Friendly Curriculum</title>
+  <meta name="description" content="Kid‑friendly, hands‑on coding lessons: start with typing, then Python. Track progress and build real skills." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b0f0c;          /* near‑black */
+      --bg2:#0f1511;         /* card bg */
+      --green:#29a36a;       /* primary */
+      --green-2:#73d4a9;     /* accent */
+      --text:#e9f3ed;        /* body */
+      --muted:#b7c7be;       /* secondary text */
+      --ring: rgba(41,163,106,.35);
+      --card: rgba(255,255,255,0.04);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      background: radial-gradient(1000px 600px at 85% -10%, rgba(41,163,106,.15), transparent),
+                  radial-gradient(800px 500px at -10% 20%, rgba(115,212,169,.12), transparent),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+    .container{max-width:1100px; margin:0 auto; padding:24px}
+    header{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:8px 0}
+    .brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--text)}
+    .logo{
+      width:42px; height:42px; border-radius:12px;
+      background: linear-gradient(135deg, var(--green), var(--green-2));
+      display:grid; place-items:center; font-weight:800; color:#06150f; box-shadow:0 6px 24px rgba(41,163,106,.35);
+    }
+    nav a{color:var(--muted); text-decoration:none; margin-left:18px; font-weight:600}
+    nav a:hover{color:var(--text)}
+
+    .hero{padding:72px 0 36px; display:grid; grid-template-columns:1.2fr 1fr; gap:28px}
+    @media (max-width:900px){ .hero{grid-template-columns:1fr} }
+    .eyebrow{display:inline-block; padding:6px 12px; border:1px solid var(--ring); border-radius:999px; color:var(--green-2); font-weight:700; letter-spacing:.02em}
+    h1{margin:.5rem 0 0; font-size:clamp(32px,5vw,54px); line-height:1.1}
+    .tagline{color:var(--muted); margin:10px 0 20px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap}
+    .btn{appearance:none; border:0; padding:12px 18px; border-radius:12px; font-weight:700; cursor:pointer}
+    .btn.primary{background:linear-gradient(135deg,var(--green),var(--green-2)); color:#06150f; box-shadow:0 10px 30px rgba(41,163,106,.35)}
+    .btn.ghost{background:transparent; color:var(--text); border:1px solid var(--ring)}
+
+    .card{background:var(--card); border:1px solid rgba(255,255,255,.06); border-radius:16px; padding:18px; box-shadow:0 12px 40px rgba(0,0,0,.25)}
+
+    .features{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin:36px 0}
+    @media (max-width:900px){ .features{grid-template-columns:1fr} }
+    .feature h3{margin:6px 0 8px}
+    .kicker{color:var(--green-2); font-weight:800; font-size:12px; letter-spacing:.08em; text-transform:uppercase}
+
+    .curriculum{display:grid; grid-template-columns:repeat(2,1fr); gap:18px}
+    @media (max-width:900px){ .curriculum{grid-template-columns:1fr} }
+    .pill{display:inline-block; padding:4px 10px; border-radius:999px; background:rgba(41,163,106,.16); color:var(--green-2); font-weight:700}
+    .lesson-title{margin:8px 0 6px}
+    .small{color:var(--muted); font-size:14px}
+
+    footer{margin:48px 0 16px; padding:24px 0; border-top:1px solid rgba(255,255,255,.06); color:var(--muted); font-size:14px}
+    .foot{display:flex; align-items:center; justify-content:space-between; gap:16px}
+    @media (max-width:700px){ .foot{flex-direction:column; align-items:flex-start} }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- NAV -->
+    <header>
+      <a class="brand" href="#">
+        <div class="logo">CC</div>
+        <strong>Code Camp (Kids)</strong>
+      </a>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#curriculum">Curriculum</a>
+        <a href="#get-started">Get started</a>
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Kid‑friendly coding</span>
+        <h1>Hands‑on coding for beginners.</h1>
+        <p class="tagline">Sharing problem‑solving strategies, resources, and insights for future competitors. Start with typing, then learn Python with playful, guided exercises.</p>
+        <div class="cta" id="get-started">
+          <a class="btn primary" href="#curriculum">Start learning</a>
+          <a class="btn ghost" href="#features">How it works</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="kicker">Live Preview</div>
+        <h3 style="margin:6px 0 12px">Your progress snapshot</h3>
+        <p class="small">When you sign in later, this box will show your streaks, last lesson, and badges. For now, it’s a static preview.</p>
+        <ul>
+          <li>Typing — accuracy: <strong>—</strong>, best WPM: <strong>—</strong></li>
+          <li>Python — lessons completed: <strong>—/10</strong></li>
+          <li>Badges — <strong>Getting Started</strong></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" class="features">
+      <div class="card feature">
+        <div class="kicker">Interactive</div>
+        <h3>Type, run, iterate</h3>
+        <p>Short, hands‑on tasks. Try, see output, and improve instantly. No installs required.</p>
+      </div>
+      <div class="card feature">
+        <div class="kicker">Kid‑Friendly</div>
+        <h3>Beginner‑first design</h3>
+        <p>Clear steps, playful examples, and gentle difficulty ramps to keep learners engaged.</p>
+      </div>
+      <div class="card feature">
+        <div class="kicker">Progress</div>
+        <h3>Track growth</h3>
+        <p>Profiles, streaks, and badges that celebrate consistency and real understanding.</p>
+      </div>
+    </section>
+
+    <!-- CURRICULUM PREVIEW -->
+    <section id="curriculum" class="curriculum">
+      <div class="card">
+        <span class="pill">Lesson 1</span>
+        <h3 class="lesson-title">Typing Skills</h3>
+        <p class="small">Master the keyboard with fun drills. Build speed, accuracy, and confidence—foundations for coding.</p>
+        <div class="cta" style="margin-top:10px">
+          <a class="btn primary" href="#">Start Typing</a>
+          <button class="btn ghost" onclick="alert('Coming soon: interactive typing component')">Preview</button>
+        </div>
+      </div>
+      <div class="card">
+        <span class="pill">Lesson 2</span>
+        <h3 class="lesson-title">Intro to Python</h3>
+        <p class="small">Learn variables, loops, and functions with bite‑sized challenges and instant feedback.</p>
+        <div class="cta" style="margin-top:10px">
+          <a class="btn primary" href="#">Start Python</a>
+          <button class="btn ghost" onclick="alert('Coming soon: code editor + run button')">Preview</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="foot">
+        <div>© <span id="year"></span> Code Camp (Kids)</div>
+        <div>Made with <span aria-hidden>🧠</span> + <span aria-hidden>💚</span> to help beginners learn to code.</div>
+      </div>
+    </footer>
+  </div>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
